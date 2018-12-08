@@ -15,6 +15,7 @@ function love.load()
         fullscreen = false
     })
     snake = Snake(1, 1, "right")
+    initializeGrid()
 end
 
 function love.keypressed(key)
@@ -39,11 +40,24 @@ end
 
 function love.draw()
     love.graphics.setColor(0, 1, 0, 1)
+    drawGrid()
+    snake:render()
+end
+
+function drawGrid()
     for y = 1, MAX_TILES_Y do
         for x = 1, MAX_TILES_X do
             love.graphics.rectangle("line", (x-1) * TILE_SIZE_X, (y-1) * TILE_SIZE_Y, 
                 TILE_SIZE_X, TILE_SIZE_Y)
         end
     end
-    snake:render()
+end
+
+function initializeGrid()
+    for y = 1, MAX_TILES_Y do
+        table.insert(tileGrid, {})
+        for x = 1, MAX_TILES_X do
+            table.insert(tileGrid[y], TILE_EMPTY)
+        end
+    end
 end
