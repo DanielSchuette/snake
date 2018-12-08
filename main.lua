@@ -2,6 +2,16 @@
     A simple Snake game
     Small parts of the code come from CS50's Twitch stream:
     https://www.youtube.com/watch?v=ld_xcXdRez4
+
+    TODO:
+        - implement self collision
+        - make sure the snake cannot run into itself
+          by changing direction from left->right or
+          up->down
+        - add highscore
+        - add 'easy mode' (snake does not die when
+          running out of bounds but wraps around 
+          instead)
 ]]
 require "src/dependencies"
 
