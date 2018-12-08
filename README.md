@@ -1,6 +1,6 @@
 # Snake Game
 
-A simple Snake Game, written in `Lua`. Code comes from CS50's Twitch stream: `https://www.youtube.com/watch?v=ld_xcXdRez4`.
+A simple Snake Game, written in `Lua`. In parts based upon code from CS50's Twitch stream: `https://www.youtube.com/watch?v=ld_xcXdRez4`.
 
 ## Dependencies
 
