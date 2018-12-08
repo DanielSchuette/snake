@@ -5,9 +5,7 @@
 ]]
 require "src/dependencies"
 
-local snakeX = 1
-local snakeY = 1
-local snakeMoving = "right"
+local snake
 local tileGrid = {}
 
 function love.load()
@@ -16,6 +14,7 @@ function love.load()
     love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT, {
         fullscreen = false
     })
+    snake = Snake(1, 1, "right")
 end
 
 function love.keypressed(key)
@@ -24,30 +23,27 @@ function love.keypressed(key)
     end
 
     if (key == "left") or (key == "h") then
-        snakeMoving = "left"
+        snake.direction = "left"
     elseif (key == "right") or (key == "l") then
-        snakeMoving = "right"
+        snake.direction = "right"
     elseif (key == "up") or (key == "k") then
-        snakeMoving = "up"
+        snake.direction = "up"
     elseif (key == "down") or (key == "j") then
-        snakeMoving = "down"
+        snake.direction = "down"
     end
 end
 
 function love.update(dt)
-    if snakeMoving == "left" then
-        snakeX = snakeX - SNAKE_SPEED * dt
-    elseif snakeMoving == "right" then
-        snakeX = snakeX + SNAKE_SPEED * dt
-    elseif snakeMoving == "up" then
-        snakeY = snakeY - SNAKE_SPEED * dt
-    elseif snakeMoving == "down" then
-        snakeY = snakeY + SNAKE_SPEED * dt
-    end
-
+    snake:update(dt)
 end
 
 function love.draw()
     love.graphics.setColor(0, 1, 0, 1)
-    love.graphics.rectangle("fill", snakeX, snakeY, SNAKE_SIZE, SNAKE_SIZE)
+    for y = 1, MAX_TILES_Y do
+        for x = 1, MAX_TILES_X do
+            love.graphics.rectangle("line", (x-1) * TILE_SIZE_X, (y-1) * TILE_SIZE_Y, 
+                TILE_SIZE_X, TILE_SIZE_Y)
+        end
+    end
+    snake:render()
 end
