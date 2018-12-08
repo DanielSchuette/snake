@@ -83,10 +83,11 @@ function drawGrid(snake)
             end
         end
     end
+
     -- check if the current position of the snake as an apple
     local sx, sy = math.floor(snake.x/TILE_SIZE_X)+1, math.floor(snake.y/TILE_SIZE_Y)+1
     if tileGrid[sy][sx] == TILE_APPLE then 
-        snake.length = snake.length + 1 -- increment the snake's length
+        snake:grow(snake)               -- grow the snake
         tileGrid = {}                   -- make an empty grid
         initializeGrid()                -- initialize the grid
         apple = Apple()                 -- make a new random apple

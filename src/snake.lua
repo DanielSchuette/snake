@@ -8,9 +8,17 @@ function Snake:init(x, y, direction, length)
     self.y = y-1
     self.direction = direction
     self.length = length
+    self.body = {}
 end
 
 function Snake:update(dt, state)
+    -- new position 1 in body table will be the former head
+    table.insert(self.body, 1, {self.x, self.y}) 
+
+    -- the last element of body table will be removed
+    table.remove(self.body)
+
+    -- now, the new position of the head will be calculated
     if self.direction == "left" then
         if not outOfBounds(self.x, self.y) then
             self.x = self.x - TILE_SIZE_X
@@ -46,9 +54,26 @@ function Snake:update(dt, state)
     end
 end
 
+function Snake:grow(state)
+    self.length = self.length + 1       -- increase the snake's length
+    x, y = self.x, self.y               -- save x and y values for the body
+    self:update(0, state)               -- advance the head once
+    table.insert(self.body, {x, y})     -- add body element where last head was
+end
+
 function Snake:render()
     love.graphics.setColor(0, 1, 0, 1) -- green for snake
+
+    -- draw the snake's head
     love.graphics.rectangle("fill", self.x, self.y, SNAKE_SIZE_X, SNAKE_SIZE_Y)
+
+    -- draw the snake's body
+    if self.length > 1 then
+        for idx = 1, (self.length-1) do -- length WITHOUT the head element
+            love.graphics.rectangle("fill", self.body[idx][1], self.body[idx][2],
+                SNAKE_SIZE_X, SNAKE_SIZE_Y)
+        end
+    end
 end
 
 function outOfBounds(x, y)
