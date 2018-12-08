@@ -1,6 +1,6 @@
 --[[
     A simple Snake game
-    The code comes from CS50's Twitch live stream:
+    Small parts of the code come from CS50's Twitch stream:
     https://www.youtube.com/watch?v=ld_xcXdRez4
 ]]
 require "src/dependencies"
