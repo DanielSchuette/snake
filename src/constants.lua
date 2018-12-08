@@ -2,8 +2,8 @@
     Global constants
 ]]
 
-WINDOW_WIDTH = 640
-WINDOW_HEIGHT = 480
+WINDOW_WIDTH = 1024
+WINDOW_HEIGHT = 640
 
 STATE_GAME_OVER = 0
 STATE_PLAYING = 1
@@ -18,7 +18,7 @@ TILE_SNAKE_HEAD = 1
 TILE_SNAKE_BODY = 2
 TILE_APPLE = 3
 
-SNAKE_SPEED = 0.2 -- time in seconds that is needed per tile
+SNAKE_SPEED = 0.1 -- time in seconds that is needed per tile
 SNAKE_SIZE_X = TILE_SIZE_X
 SNAKE_SIZE_Y = TILE_SIZE_Y
 SNAKE_IS_WRAPPING = false

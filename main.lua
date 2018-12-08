@@ -84,8 +84,21 @@ function drawGrid(snake)
         end
     end
 
-    -- check if the current position of the snake as an apple
+    -- check if the current position of the snake is an apple
     local sx, sy = math.floor(snake.x/TILE_SIZE_X)+1, math.floor(snake.y/TILE_SIZE_Y)+1
+
+    -- there seems to be an ugly bug when the snake leave the window at the top
+    -- or the bottom; the reason is probably that the y coodinate becomes to big/
+    -- small and indexes the table out of bounds; the following fixes that (ugly)
+    -- TODO: actually fix this bug with more than a work-around like below
+    if (sy < 1) then
+        sy = 1
+    end
+    if (sy > #tileGrid) then
+        sy = #tileGrid
+    end
+
+    -- now, continue with the logic to grow the snake if it eats an apple
     if tileGrid[sy][sx] == TILE_APPLE then 
         snake:grow(snake)               -- grow the snake
         tileGrid = {}                   -- make an empty grid
