@@ -5,19 +5,20 @@
 ]]
 require "src/dependencies"
 
-local snake
 local state
-local tileGrid = {}
+local snake
+local apple
+local tileGrid
+local timer = 0
 
 function love.load()
     print("running...")
+    math.randomseed(os.time())
     love.window.setTitle("Snake Game")
     love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT, {
         fullscreen = false
     })
-    snake = Snake(1, 1, "right")
     state = State(STATE_GAME_OVER)
-    initializeGrid()
 end
 
 function love.keypressed(key)
@@ -38,14 +39,22 @@ function love.keypressed(key)
     elseif state:getState() == STATE_GAME_OVER then
         if key == "space" then
             state:changeState(STATE_PLAYING)
-            snake = Snake(1, 1, "right") -- make a new snake
+            tileGrid = {} -- make an empty grid
+            initializeGrid() -- initialize the grid
+            snake = Snake(1, 1, "right", 1) -- make a new snake
+            apple = Apple() -- make a new random apple
+            apple:positionOnTile(tileGrid) -- position the apple on the grid
         end
     end
 end
 
 function love.update(dt)
     if state:getState() == STATE_PLAYING then
-        snake:update(dt, state)
+        timer = timer + dt
+        if timer > SNAKE_SPEED then
+            snake:update(dt, state)
+            timer = 0
+        end
     end
 end
 
@@ -54,19 +63,40 @@ function love.draw()
         love.graphics.setColor(1, 1, 1, 1)
         renderTitleScreen()
     elseif state:getState() == STATE_PLAYING then
-        love.graphics.setColor(0, 1, 0, 1)
-        drawGrid()
+        drawGrid(snake)
+        drawScore(snake)
         snake:render()
     end
 end
 
-function drawGrid()
+function drawGrid(snake)
     for y = 1, MAX_TILES_Y do
         for x = 1, MAX_TILES_X do
-            love.graphics.rectangle("line", (x-1) * TILE_SIZE_X, (y-1) * TILE_SIZE_Y, 
-                TILE_SIZE_X, TILE_SIZE_Y)
+            if tileGrid[y][x] == TILE_EMPTY then
+                love.graphics.setColor(1, 1, 1, 0) -- white for grid (currently invisible)
+                love.graphics.rectangle("line", (x-1) * TILE_SIZE_X, (y-1) * TILE_SIZE_Y, 
+                    TILE_SIZE_X, TILE_SIZE_Y)
+            elseif tileGrid[y][x] == TILE_APPLE then
+                love.graphics.setColor(1, 0, 0, 1) -- red for apple
+                love.graphics.rectangle("fill", (x-1) * TILE_SIZE_X, (y-1) * TILE_SIZE_Y,
+                    TILE_SIZE_X, TILE_SIZE_Y)
+            end
         end
     end
+    -- check if the current position of the snake as an apple
+    local sx, sy = math.floor(snake.x/TILE_SIZE_X)+1, math.floor(snake.y/TILE_SIZE_Y)+1
+    if tileGrid[sy][sx] == TILE_APPLE then 
+        snake.length = snake.length + 1 -- increment the snake's length
+        tileGrid = {}                   -- make an empty grid
+        initializeGrid()                -- initialize the grid
+        apple = Apple()                 -- make a new random apple
+        apple:positionOnTile(tileGrid)  -- position the apple on the grid
+    end
+end
+
+function drawScore(snake)
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.print(string.format("Score: %d", snake.length-1), 10, 10, 0, 2, 2)
 end
 
 function initializeGrid()

@@ -3,16 +3,17 @@
 ]]
 Snake = Class{}
 
-function Snake:init(x, y, direction)
-    self.x = x
-    self.y = y
+function Snake:init(x, y, direction, length)
+    self.x = x-1
+    self.y = y-1
     self.direction = direction
+    self.length = length
 end
 
 function Snake:update(dt, state)
     if self.direction == "left" then
         if not outOfBounds(self.x, self.y) then
-            self.x = self.x - SNAKE_SPEED * dt
+            self.x = self.x - TILE_SIZE_X
         elseif SNAKE_IS_WRAPPING then
             self.x = WINDOW_WIDTH
         else
@@ -20,7 +21,7 @@ function Snake:update(dt, state)
         end
     elseif self.direction == "right" then
         if not outOfBounds(self.x, self.y) then
-            self.x = self.x + SNAKE_SPEED * dt
+            self.x = self.x + TILE_SIZE_X
         elseif SNAKE_IS_WRAPPING then
             self.x = 0
         else
@@ -28,7 +29,7 @@ function Snake:update(dt, state)
         end
     elseif self.direction == "up" then
         if not outOfBounds(self.x, self.y) then
-            self.y = self.y - SNAKE_SPEED * dt
+            self.y = self.y - TILE_SIZE_Y
         elseif SNAKE_IS_WRAPPING then
             self.y = WINDOW_HEIGHT
         else
@@ -36,7 +37,7 @@ function Snake:update(dt, state)
         end
     elseif self.direction == "down" then
         if not outOfBounds(self.x, self.y) then
-            self.y = self.y + SNAKE_SPEED * dt
+            self.y = self.y + TILE_SIZE_Y
         elseif SNAKE_IS_WRAPPING then
             self.y = 0
         else
@@ -46,6 +47,7 @@ function Snake:update(dt, state)
 end
 
 function Snake:render()
+    love.graphics.setColor(0, 1, 0, 1) -- green for snake
     love.graphics.rectangle("fill", self.x, self.y, SNAKE_SIZE_X, SNAKE_SIZE_Y)
 end
 
