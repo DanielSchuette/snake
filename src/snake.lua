@@ -50,7 +50,8 @@ function Snake:render()
 end
 
 function outOfBounds(x, y)
-    if (x < 0) or (y < 0) or (x > WINDOW_WIDTH) or (y > WINDOW_HEIGHT) then
+    if (x < 0) or (y < 0) or (x > (WINDOW_WIDTH-SNAKE_SIZE_X+1)) or 
+        (y > (WINDOW_HEIGHT-SNAKE_SIZE_Y+1)) then
         return true
     end
     return false
